@@ -5,15 +5,15 @@ import { tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class PurchaseProductService {
+export class BusinessProductService {
 
-  private readonly API = 'api/purchase-products'
+  private readonly API = 'api/business-products'
 
   constructor(private httpClient: HttpClient) { }
 
-  getAllPuchaseProducts() {
+  getAllBusinessProducts() {
     return this.httpClient.get<any[]>(this.API).pipe(
-      tap(purchaseProducts => console.log(purchaseProducts))
+      tap(businessProducts => console.log(businessProducts))
       );
   }
 }

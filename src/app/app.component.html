@@ -6,8 +6,8 @@
     <button mat-button class="menu-btt" routerLink="/person">Entidades</button>
     <button mat-button class="menu-btt" routerLink="/type-person">Tipos</button>
     <button mat-button class="menu-btt" routerLink="/product">Produtos</button>
-    <button mat-button class="menu-btt" routerLink="/purchases">Compras</button>
-    <button mat-button class="menu-btt" routerLink="/sales">Vendas</button>
+    <button mat-button class="menu-btt" routerLink="/business" [queryParams]="{type: 1}">Compras</button>
+    <button mat-button class="menu-btt" routerLink="/business" [queryParams]="{type: 2}">Vendas</button>
   </div>
 </mat-toolbar>
 <router-outlet></router-outlet>

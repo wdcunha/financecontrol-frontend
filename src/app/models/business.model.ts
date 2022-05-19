@@ -2,7 +2,7 @@ import { PurchasePayment } from './purchase-payment.model';
 import { Person } from "./person.model";
 import { PurchaseProduct } from "./purchase-product.model";
 
-export interface Purchases {
+export interface Business {
   id: number;
   businessProducts: PurchaseProduct[];
   businessPayments: PurchasePayment[];

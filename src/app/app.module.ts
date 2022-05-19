@@ -13,7 +13,7 @@ import { AppComponent } from './app.component';
 import { TypePersonComponent } from './components/type-person/type-person.component';
 import { PersonComponent } from './components/person/person.component';
 import { ProductComponent } from './components/product/product.component';
-import { PurchasesComponent } from './components/purchases/purchases.component';
+import { BusinessComponent } from './components/business/business.component';
 import { SalesComponent } from './components/sales/sales.component';
 import localePt from '@angular/common/locales/pt';
 import {registerLocaleData} from '@angular/common';
@@ -26,7 +26,7 @@ registerLocaleData(localePt)
     TypePersonComponent,
     PersonComponent,
     ProductComponent,
-    PurchasesComponent,
+    BusinessComponent,
     SalesComponent
   ],
   imports: [
