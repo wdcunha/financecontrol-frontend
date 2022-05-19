@@ -8,7 +8,7 @@ import { tap } from 'rxjs/operators';
 })
 export class PurchasesService {
 
-  private readonly API = 'api/purchases'
+  private readonly API = 'api/business'
 
   constructor(private httpClient: HttpClient) { }
 

@@ -21,7 +21,9 @@ export class PurchasesComponent implements OnInit {
 
   purchases$: Observable<Purchases[]>;
 
-  displayedColumns = ['cod', 'provider', 'occurenceDate', 'purchaseAmount', 'notes'];
+  displayedColumns = ['cod', 'provider', 'occurenceDate', 'purchaseAmount', 'payment', 'installments', 'value', 'notes'];
+
+  columnsPaymentToDisplay = ['description', 'size', 'quantity', 'price', 'total', 'notes'];
 
   columnsToDisplay = ['cod', 'description', 'size', 'quantity', 'price', 'total', 'notes'];
 

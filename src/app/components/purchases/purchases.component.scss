@@ -45,3 +45,25 @@ tr.element-row:not(.expanded-row):active {
 .element-description-attribution {
   opacity: 0.5;
 }
+
+.prod-cod {
+  min-width: 50px;
+}
+.prod-description {
+  min-width: 150px;
+}
+.prod-size {
+  min-width: 80px;
+}
+.prod-qtd {
+  min-width: 80px;
+}
+.prod-price-un {
+  min-width: 100px;
+}
+.prod-total {
+  min-width: 100px;
+}
+.prod-notes {
+  min-width: 200px;
+}

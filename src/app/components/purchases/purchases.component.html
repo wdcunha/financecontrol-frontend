@@ -18,12 +18,33 @@
 
         <ng-container matColumnDef="occurenceDate">
           <th mat-header-cell *matHeaderCellDef>Data</th>
-          <td mat-cell *matCellDef="let purchase">{{ purchase.occurenceDate }}</td>
+          <td mat-cell *matCellDef="let purchase">{{ purchase.businessDate }}</td>
         </ng-container>
 
         <ng-container matColumnDef="purchaseAmount">
-          <th mat-header-cell *matHeaderCellDef>Total da Compra</th>
-          <td mat-cell *matCellDef="let purchase">{{ purchase.purchaseTotal | currency:'BRL'}}</td>
+          <th mat-header-cell *matHeaderCellDef>Total Compra</th>
+          <td mat-cell *matCellDef="let purchase">{{ purchase.businessTotal | currency:'BRL' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="payment">
+          <th mat-header-cell *matHeaderCellDef>Forma Pagto</th>
+          <td mat-cell *matCellDef="let purchase">
+            <p *ngFor="let pay of purchase.businessPayments">{{ pay.payment.description }}</p>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="installments">
+          <th mat-header-cell *matHeaderCellDef>x vezes</th>
+          <td mat-cell *matCellDef="let purchase">
+            <p *ngFor="let pay of purchase.businessPayments">{{ pay.quantity }}</p>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef>Parcelas</th>
+          <td mat-cell *matCellDef="let purchase">
+            <p *ngFor="let pay of purchase.businessPayments">{{ pay.installments | currency:'BRL' }}</p>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="notes">
@@ -34,44 +55,44 @@
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
         <ng-container matColumnDef="expandedDetail">
           <td mat-cell *matCellDef="let purchase" [attr.colspan]="columnsToDisplay.length">
-            <div class="element-detail" *ngIf="purchase.purchaseProducts"
+            <div class="element-detail" *ngIf="purchase.businessProducts"
             [@detailExpand]="purchase == expandedElement ? 'expanded' : 'collapsed'">
 
-              <table mat-table [dataSource]="purchase.purchaseProducts" multiTemplateDataRows class="mat-elevation-z8">
+              <table mat-table [dataSource]="purchase.businessProducts" multiTemplateDataRows class="mat-elevation-z8">
 
                 <ng-container matColumnDef="cod">
                   <th mat-header-cell *matHeaderCellDef>Cod</th>
-                  <td mat-cell *matCellDef="let pp">{{ pp.product.id }}</td>
+                  <td mat-cell *matCellDef="let pp" class="prod-cod">{{ pp.product.id }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="description">
                   <th mat-header-cell *matHeaderCellDef>Descrição</th>
-                  <td mat-cell *matCellDef="let pp">{{ pp.product.description }}</td>
+                  <td mat-cell *matCellDef="let pp" class="prod-description">{{ pp.product.description }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="size">
                   <th mat-header-cell *matHeaderCellDef>Tamanho</th>
-                  <td mat-cell *matCellDef="let pp">{{ pp.product.size }}</td>
+                  <td mat-cell *matCellDef="let pp" class="prod-size">{{ pp.product.size }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="quantity">
-                  <th mat-header-cell *matHeaderCellDef>Quantidade</th>
-                  <td mat-cell *matCellDef="let pp">{{ pp.quantity }}</td>
+                  <th mat-header-cell *matHeaderCellDef>Qtd</th>
+                  <td mat-cell *matCellDef="let pp" class="prod-qtd">{{ pp.quantity }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="price">
-                  <th mat-header-cell *matHeaderCellDef>Preço</th>
-                  <td mat-cell *matCellDef="let pp">{{ pp.price }}</td>
+                  <th mat-header-cell *matHeaderCellDef>Preço Un.</th>
+                  <td mat-cell *matCellDef="let pp" class="prod-price-un">{{ pp.price | currency:'BRL' }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="total">
                   <th mat-header-cell *matHeaderCellDef>Total</th>
-                  <td mat-cell *matCellDef="let pp">{{ pp.totalPrice }}</td>
+                  <td mat-cell *matCellDef="let pp" class="prod-total">{{ pp.totalPrice | currency:'BRL' }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="notes">
                   <th mat-header-cell *matHeaderCellDef>Observações</th>
-                  <td mat-cell *matCellDef="let pp">{{ pp.product.notes }}</td>
+                  <td mat-cell *matCellDef="let pp" class="prod-notes">{{ pp.product.notes }}</td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
