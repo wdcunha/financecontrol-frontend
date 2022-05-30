@@ -29,19 +29,19 @@
         <ng-container matColumnDef="payment">
           <th mat-header-cell *matHeaderCellDef>Forma Pagto</th>
           <td mat-cell *matCellDef="let business">
-            <p *ngFor="let pay of business.businessPayments">{{ pay.payment.description }}</p>
+            <p *ngFor="let pay of business.countIntallments | keyvalue">{{ pay.key }}</p>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="installments">
           <th mat-header-cell *matHeaderCellDef>x vezes</th>
           <td mat-cell *matCellDef="let business">
-            <p *ngFor="let pay of business.businessPayments">{{ pay.quantity }}</p>
+            <p *ngFor="let pay of business.countIntallments | keyvalue">{{ pay.value }}</p>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="value">
-          <th mat-header-cell *matHeaderCellDef>Parcelas</th>
+          <th mat-header-cell *matHeaderCellDef>Parcelas (R$)</th>
           <td mat-cell *matCellDef="let business">
             <p *ngFor="let pay of business.businessPayments">{{ pay.installments | currency:'BRL' }}</p>
           </td>
