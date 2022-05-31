@@ -43,7 +43,7 @@
         <ng-container matColumnDef="value">
           <th mat-header-cell *matHeaderCellDef>Parcelas (R$)</th>
           <td mat-cell *matCellDef="let business">
-            <p *ngFor="let pay of business.businessPayments">{{ pay.installments | currency:'BRL' }}</p>
+            <p *ngFor="let pay of business.intallmentsValues">{{ pay | currency:'BRL' }}</p>
           </td>
         </ng-container>
 
