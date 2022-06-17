@@ -21,7 +21,7 @@
         <mat-select required
         name="entities" formControlName="entities">
           <mat-option>-- None --</mat-option>
-          <mat-option *ngFor="let ent of entities$ | async" value="ent.id">{{ ent.name }}</mat-option>
+          <mat-option *ngFor="let ent of entities" value="ent.id">{{ ent.name }}</mat-option>
         </mat-select>
         <mat-label>{{ entityType }}</mat-label>
       </mat-form-field>

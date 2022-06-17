@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Person } from 'src/app/models/person.model';
 import { BusinessType } from '../../../models/business-type.model';
 import { BusinessTypeService } from '../../../services/business-type.service';
@@ -20,6 +21,7 @@ export class BusinessFormComponent implements OnInit {
   businessTypeDescrip!: string;
   businessTypeId = new FormControl();
   edit: boolean = false;
+  entities: Person[] = [];
   entities$!: Observable<Person[]>;
   entityType: string | undefined;
   formType: string | undefined;
@@ -38,11 +40,13 @@ export class BusinessFormComponent implements OnInit {
       hideRequired: this.hideRequiredControl,
       floatLabel: this.floatLabelControl,
       occuranceDate: this.startDate,
-      entities: this.entities$,
+      entities: [null, Validators.required],
       bustype: [null, Validators.required],
       patientCategory: [null, Validators.required],
       userSelection:  [null, Validators.required]
     })
+
+    this.entities$ = this.personServ.getAllPersons();
 
     this.route.queryParams.subscribe(params => {
       switch(params.type) {
@@ -52,6 +56,7 @@ export class BusinessFormComponent implements OnInit {
           this.businessTypeId = new FormControl(params.type)
           this.businessTypeDescrip = "Tipo Negócio"
           this.formType = "entradas"
+          this.setEntitiesByBusinessType(params.type);
           break;
         }
         case '2': {
@@ -60,6 +65,7 @@ export class BusinessFormComponent implements OnInit {
           this.businessTypeId = new FormControl(params.type)
           this.businessTypeDescrip = "Tipo Negócio"
           this.formType = "saídas"
+          this.setEntitiesByBusinessType(params.type);
           break;
         }
         default: {
@@ -69,16 +75,10 @@ export class BusinessFormComponent implements OnInit {
         }
       }
 
-      this.options.get('entities')?.setValue({
-        id: null,
-        description: '',
-        business: null
-      });
+      this.options.get('entities')?.reset();
 
       this.setDefaultValue();
     });
-
-    this.entities$ = this.personServ.getAllPersons();
 
     this.getBusinesstype();
   }
@@ -95,4 +95,9 @@ export class BusinessFormComponent implements OnInit {
 
     this.options.get('bustype')?.setValue(selectedType);
   }
+
+  setEntitiesByBusinessType(type: number) {
+    this.entities$.pipe(map(x => x.filter(t => t.type.id == type))).subscribe(p => this.entities = p);
+  }
+
 }
