@@ -1,0 +1,55 @@
+<mat-card>
+  <mat-toolbar color="purple">Cadastro de {{ title }}</mat-toolbar>
+  <mat-card-header>
+    <mat-card-subtitle>Formulário de  {{ formType }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <form [formGroup]="options">
+      <mat-form-field appearance="outline" [ngClass]="{'hidden': !edit}">
+        <mat-select placeholder="Type" formControlName="bustype">
+          <mat-option *ngFor="let ent of businesType$" [value]="ent">{{ ent.description }}</mat-option>
+        </mat-select>
+        <mat-label>{{ businessTypeDescrip }}</mat-label>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"
+          [hideRequiredMarker]="hideRequiredControl.value"
+          [floatLabel]="floatLabelControl.value">
+        <mat-select required
+        name="entities" formControlName="entities">
+          <mat-option>-- None --</mat-option>
+          <mat-option *ngFor="let ent of entities$ | async" value="ent.id">{{ ent.name }}</mat-option>
+        </mat-select>
+        <mat-label>{{ entityType }}</mat-label>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker" name="occuranceDate" formControlName="occuranceDate">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker [startAt]="startDate"></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="notesh">
+        <mat-label>Observações</mat-label>
+        <textarea matInput placeholder="Placeholder"></textarea>
+        <mat-hint>Lançar qualquer detalhe importante</mat-hint>
+      </mat-form-field>
+
+      <div class="button-row">
+        <button mat-raised-button color="warn">Save</button>
+      </div>
+
+    </form>
+    </mat-card-content>
+  <ng-template #loading>
+    <div class="loading-spinner">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+</mat-card>
+

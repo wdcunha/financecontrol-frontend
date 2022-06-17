@@ -1,0 +1,23 @@
+form .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+form .mat-form-field {
+  width: 220px;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+form > * {
+  margin: 5px 0;
+}
+
+.notesh {
+  width: 300px;
+}
+
+.hidden {
+  display: none;
+}

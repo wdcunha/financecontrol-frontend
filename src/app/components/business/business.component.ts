@@ -34,15 +34,11 @@ export class BusinessComponent implements OnInit {
   expandedElement!: Observable<Business[]> | null;
 
   constructor(private purchasesService: BusinessService, private purchaseProductServ: BusinessProductService,
-    private route: ActivatedRoute) {
-
-    }
+    private route: ActivatedRoute) {}
 
     ngOnInit(): void {
       this.route.queryParams.subscribe(params => {
-        console.log(params.type);
         this.business$ = this.purchasesService.getAllBusiness(params.type);
-        console.log(this.business$);
 
         switch(params.type) {
           case '1': {
