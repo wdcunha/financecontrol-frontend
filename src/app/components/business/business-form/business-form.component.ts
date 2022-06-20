@@ -1,3 +1,4 @@
+import { Business } from './../../../models/business.model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -19,17 +20,15 @@ export class BusinessFormComponent implements OnInit {
   businesType: BusinessType | undefined;
   businesType$: BusinessType[] = [];
   businessTypeDescrip!: string;
-  businessTypeId = new FormControl();
+  businessTypeId!: number;
   edit: boolean = false;
   entities: Person[] = [];
   entities$!: Observable<Person[]>;
   entityType: string | undefined;
   formType: string | undefined;
-  floatLabelControl = new FormControl('auto');
-  hideRequiredControl = new FormControl(false);
   options!: FormGroup;
   selected: string = '';
-  startDate = new FormControl(new Date());
+  startDate = new Date();
   title: string | undefined;
 
   constructor(private route: ActivatedRoute, private fb: FormBuilder, private bs: BusinessService,
@@ -37,13 +36,10 @@ export class BusinessFormComponent implements OnInit {
 
   async ngOnInit() {
     this.options = this.fb.group({
-      hideRequired: this.hideRequiredControl,
-      floatLabel: this.floatLabelControl,
-      occuranceDate: this.startDate,
-      entities: [null, Validators.required],
-      bustype: [null, Validators.required],
-      patientCategory: [null, Validators.required],
-      userSelection:  [null, Validators.required]
+      occuranceDate: new FormControl(this.startDate),
+      entities: new FormControl([null, Validators.required]),
+      bustype: new FormControl([null]),
+      noteText: new FormControl([null]),
     })
 
     this.entities$ = this.personServ.getAllPersons();
@@ -53,7 +49,7 @@ export class BusinessFormComponent implements OnInit {
         case '1': {
           this.title = "Compras"
           this.entityType = "Fornecedor"
-          this.businessTypeId = new FormControl(params.type)
+          this.businessTypeId = params.type
           this.businessTypeDescrip = "Tipo Negócio"
           this.formType = "entradas"
           this.setEntitiesByBusinessType(params.type);
@@ -62,7 +58,7 @@ export class BusinessFormComponent implements OnInit {
         case '2': {
           this.title = "Vendas"
           this.entityType = "Cliente"
-          this.businessTypeId = new FormControl(params.type)
+          this.businessTypeId = params.type
           this.businessTypeDescrip = "Tipo Negócio"
           this.formType = "saídas"
           this.setEntitiesByBusinessType(params.type);
@@ -91,7 +87,7 @@ export class BusinessFormComponent implements OnInit {
   }
 
   setDefaultValue() {
-    const selectedType = this.businesType$.find(t => t.id == this.businessTypeId.value);
+    const selectedType = this.businesType$.find(t => t.id == this.businessTypeId);
 
     this.options.get('bustype')?.setValue(selectedType);
   }
@@ -100,4 +96,8 @@ export class BusinessFormComponent implements OnInit {
     this.entities$.pipe(map(x => x.filter(t => t.type.id == type))).subscribe(p => this.entities = p);
   }
 
+  onSubmit(event: Business) {
+    console.log(event);
+
+  }
 }

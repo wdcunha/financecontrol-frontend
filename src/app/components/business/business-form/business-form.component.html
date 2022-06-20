@@ -7,7 +7,7 @@
 
     <mat-divider></mat-divider>
 
-    <form [formGroup]="options">
+    <form [formGroup]="options" (ngSubmit)="onSubmit($event)">
       <mat-form-field appearance="outline" [ngClass]="{'hidden': !edit}">
         <mat-select placeholder="Type" formControlName="bustype">
           <mat-option *ngFor="let ent of businesType$" [value]="ent">{{ ent.description }}</mat-option>
@@ -15,9 +15,7 @@
         <mat-label>{{ businessTypeDescrip }}</mat-label>
       </mat-form-field>
 
-      <mat-form-field appearance="outline"
-          [hideRequiredMarker]="hideRequiredControl.value"
-          [floatLabel]="floatLabelControl.value">
+      <mat-form-field appearance="outline">
         <mat-select required
         name="entities" formControlName="entities">
           <mat-option>-- None --</mat-option>
@@ -36,12 +34,12 @@
 
       <mat-form-field appearance="outline" class="notesh">
         <mat-label>Observações</mat-label>
-        <textarea matInput placeholder="Placeholder"></textarea>
+        <textarea matInput placeholder="Placeholder" formControlName="noteText"></textarea>
         <mat-hint>Lançar qualquer detalhe importante</mat-hint>
       </mat-form-field>
 
       <div class="button-row">
-        <button mat-raised-button color="warn">Save</button>
+        <button mat-raised-button color="warn" type="submit" [disabled]="!options.valid">Salvar</button>
       </div>
 
     </form>
