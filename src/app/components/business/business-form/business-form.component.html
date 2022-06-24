@@ -7,7 +7,7 @@
 
     <mat-divider></mat-divider>
 
-    <form [formGroup]="options" (ngSubmit)="onSubmit($event)">
+    <form [formGroup]="options">
       <mat-form-field appearance="outline" [ngClass]="{'hidden': !edit}">
         <mat-select placeholder="Type" formControlName="bustype">
           <mat-option *ngFor="let ent of businesType$" [value]="ent">{{ ent.description }}</mat-option>
@@ -19,7 +19,7 @@
         <mat-select required
         name="entities" formControlName="entities">
           <mat-option>-- None --</mat-option>
-          <mat-option *ngFor="let ent of entities" value="ent.id">{{ ent.name }}</mat-option>
+          <mat-option *ngFor="let ent of entities" [value]="ent">{{ ent.name }}</mat-option>
         </mat-select>
         <mat-label>{{ entityType }}</mat-label>
       </mat-form-field>
@@ -27,7 +27,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Choose a date</mat-label>
         <input matInput [matDatepicker]="picker" name="occuranceDate" formControlName="occuranceDate">
-        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-hint>DD/MM/YYYY</mat-hint>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker [startAt]="startDate"></mat-datepicker>
       </mat-form-field>
@@ -39,9 +39,9 @@
       </mat-form-field>
 
       <div class="button-row">
-        <button mat-raised-button color="warn" type="submit" [disabled]="!options.valid">Salvar</button>
+        <button mat-raised-button color="warn" [disabled]="!options.valid" (click)="onSubmit()">Salvar</button>
+        <button mat-raised-button (click)="onCancel()">Cancelar</button>
       </div>
-
     </form>
     </mat-card-content>
   <ng-template #loading>

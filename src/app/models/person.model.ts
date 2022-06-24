@@ -1,7 +1,7 @@
 import { TypePerson } from "./type-person.model";
 
 export interface Person {
-  id: number;
+  id?: number;
   type: TypePerson;
   numDoc: string;
   name: string;
