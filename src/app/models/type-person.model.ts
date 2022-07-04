@@ -1,6 +1,6 @@
 import { Person } from 'src/app/models/person.model';
-export interface TypePerson {
-  id: number;
-  description: string;
+export class TypePerson {
+  id: number = 0;
+  description: string = '';
   person?: Person;
 }

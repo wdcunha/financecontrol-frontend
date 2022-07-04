@@ -27,6 +27,7 @@ import { PersonComponent } from './components/person/person.component';
 import { ProductComponent } from './components/product/product.component';
 import { SalesComponent } from './components/sales/sales.component';
 import { TypePersonComponent } from './components/type-person/type-person.component';
+import { BusinessProductComponent } from './components/business-product/business-product.component';
 
 registerLocaleData(localePt)
 
@@ -38,6 +39,8 @@ registerLocaleData(localePt)
     ProductComponent,
     BusinessComponent,
     SalesComponent,
+    BusinessFormComponent,
+    BusinessProductComponent,
     BusinessFormComponent
   ],
   imports: [

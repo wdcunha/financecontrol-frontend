@@ -1,7 +1,9 @@
 import { Business } from './business.model';
 
-export interface BusinessType {
+export class BusinessType {
   id?: number;
-  description: string;
+  description: string = '';
   business?: Business[];
+
+  constructor() {}
 }

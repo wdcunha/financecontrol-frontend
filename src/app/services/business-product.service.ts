@@ -1,6 +1,7 @@
+import { BusinessProduct } from './../models/business-product.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs/operators';
+import { first, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +16,9 @@ export class BusinessProductService {
     return this.httpClient.get<any[]>(this.API).pipe(
       tap(businessProducts => console.log(businessProducts))
       );
+  }
+
+  saveBusinessProduct(data: BusinessProduct[]) {
+    return this.httpClient.post<BusinessProduct[]>(`${this.API}/save-all`,data);
   }
 }

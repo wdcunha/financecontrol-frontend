@@ -8,14 +8,14 @@
     <button mat-button class="menu-btt" routerLink="/product">Produtos</button>
     <button mat-button [matMenuTriggerFor]="matPurchase">Compras</button>
     <mat-menu #matPurchase="matMenu">
-      <button mat-button class="menu-btt" routerLink="/business" [queryParams]="{type: 2}">Lista</button>
-      <button mat-button class="menu-btt" routerLink="/business-form" [queryParams]="{type: 2}">Cadastrar compras</button>
+      <button mat-button class="menu-btt" routerLink="/business" [queryParams]="{type: 1}">Lista</button>
+      <button mat-button class="menu-btt" routerLink="/business-form" [queryParams]="{type: 1}">Cadastrar compras</button>
 
     </mat-menu>
     <button mat-button [matMenuTriggerFor]="matSale">Vendas</button>
     <mat-menu #matSale="matMenu">
-      <button mat-button class="menu-btt" routerLink="/business" [queryParams]="{type: 1}">Vendas</button>
-      <button mat-button class="menu-btt" routerLink="/business-form" [queryParams]="{type: 1}">Cadastrar vendas</button>
+      <button mat-button class="menu-btt" routerLink="/business" [queryParams]="{type: 2}">Vendas</button>
+      <button mat-button class="menu-btt" routerLink="/business-form" [queryParams]="{type: 2}">Cadastrar vendas</button>
 
     </mat-menu>
   </div>

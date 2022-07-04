@@ -9,7 +9,7 @@
 
     <form [formGroup]="options">
       <mat-form-field appearance="outline" [ngClass]="{'hidden': !edit}">
-        <mat-select placeholder="Type" formControlName="bustype">
+        <mat-select placeholder="Type" formControlName="bustype" [disabled]="isSaved">
           <mat-option *ngFor="let ent of businesType$" [value]="ent">{{ ent.description }}</mat-option>
         </mat-select>
         <mat-label>{{ businessTypeDescrip }}</mat-label>
@@ -38,12 +38,20 @@
         <mat-hint>Lançar qualquer detalhe importante</mat-hint>
       </mat-form-field>
 
-      <div class="button-row">
+      <div class="margin-top-15px" *ngIf="isSaved">
         <button mat-raised-button color="warn" [disabled]="!options.valid" (click)="onSubmit()">Salvar</button>
-        <button mat-raised-button (click)="onCancel()">Cancelar</button>
+        <button mat-raised-button class="margin-left-10px" (click)="resetForm()">Cancelar</button>
       </div>
     </form>
-    </mat-card-content>
+    isSaved {{isSaved}}
+    <div *ngIf="isSaved">
+      <app-business-product
+        [businessObj]="businessObj"
+        [businessTitle]="title"
+        [businessType]="businessTypeId">
+      </app-business-product>
+    </div>
+  </mat-card-content>
   <ng-template #loading>
     <div class="loading-spinner">
       <mat-spinner></mat-spinner>

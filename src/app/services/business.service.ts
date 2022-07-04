@@ -13,7 +13,7 @@ export class BusinessService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAllBusiness(type: string): Observable<Business[]> {
+  getAllBusiness(type: number): Observable<Business[]> {
     return this.httpClient.get<Business[]>(`api/business/type/${type}`).pipe(
         tap(business => console.log(business))
       );

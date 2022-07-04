@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -23,7 +22,8 @@ import { Business } from './../../../models/business.model';
   styleUrls: ['./business-form.component.scss'],
 })
 export class BusinessFormComponent implements OnInit {
-  businesType: BusinessType | undefined;
+  businessObj: Business = new Business();
+  businesType: BusinessType = new BusinessType();
   businesType$: BusinessType[] = [];
   businessTypeDescrip!: string;
   businessTypeId!: number;
@@ -33,9 +33,10 @@ export class BusinessFormComponent implements OnInit {
   entityType: string | undefined;
   formType: string | undefined;
   options!: FormGroup;
+  isSaved: boolean = true;
   selected: string = '';
   startDate = new Date();
-  title: string | undefined;
+  title: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -44,38 +45,32 @@ export class BusinessFormComponent implements OnInit {
     private personServ: PersonService,
     private btype: BusinessTypeService,
     private snackBar: MatSnackBar,
-    private localtion: Location
   ) {
   }
 
   async ngOnInit() {
-    this.options = this.fb.group({
-      occuranceDate: new FormControl(this.startDate),
-      entities: new FormControl([null, Validators.required]),
-      bustype: new FormControl([null]),
-      noteText: new FormControl([null]),
-    });
 
     this.entities$ = this.personServ.getAllPersons();
 
     this.route.queryParams.subscribe((params) => {
+      this.resetForm();
       switch (params.type) {
         case '1': {
-          this.title = 'Vendas';
-          this.entityType = 'Cliente';
-          this.businessTypeId = params.type;
-          this.businessTypeDescrip = 'Tipo Negócio';
-          this.formType = 'saídas';
-          this.setEntitiesByBusinessType(params.type);
-          break;
-        }
-        case '2': {
-          this.title = 'Compras';
+          this.title = 'Compra';
           this.entityType = 'Fornecedor';
           this.businessTypeId = params.type;
           this.businessTypeDescrip = 'Tipo Negócio';
-          this.formType = 'entradas';
-          this.setEntitiesByBusinessType(params.type);
+          this.formType = 'entrada';
+          this.setEntitiesByBusinessType(2);
+          break;
+        }
+        case '2': {
+          this.title = 'Venda';
+          this.entityType = 'Cliente';
+          this.businessTypeId = 2;
+          this.businessTypeDescrip = 'Tipo Negócio';
+          this.formType = 'saída';
+          this.setEntitiesByBusinessType(1);
           break;
         }
         default: {
@@ -129,13 +124,22 @@ export class BusinessFormComponent implements OnInit {
     this.bs.saveBusiness(busn).subscribe(saved => {
       console.warn("Registro de " + this.title + " " + saved.id + ", " + saved.entity);
 
-      this.snackBar.open(`Registro de  ${this.title}, ${saved.id}, ${saved.entity}`, '', {
-        duration: 5000,
+      this.businessObj = saved;
+      this.isSaved = true;
+      this.options.disable();
+
+      this.snackBar.open(`Registro de  ${this.title}, ${saved.id}, ${saved.entity.name}`, 'Salvo com Sucesso!', {
+        duration: 15000,
       });
     });
   }
 
-  onCancel() {
-    this.localtion.back();
+  resetForm() {
+    this.options = this.fb.group({
+      occuranceDate: new FormControl(this.startDate),
+      entities: new FormControl([null, Validators.required]),
+      bustype: new FormControl([null]),
+      noteText: new FormControl([null]),
+    });
   }
 }
