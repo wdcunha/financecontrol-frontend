@@ -28,6 +28,8 @@ import { ProductComponent } from './components/product/product.component';
 import { SalesComponent } from './components/sales/sales.component';
 import { TypePersonComponent } from './components/type-person/type-person.component';
 import { BusinessProductComponent } from './components/business-product/business-product.component';
+import { BusinessPaymentComponent } from './components/business-payment/business-payment.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 registerLocaleData(localePt)
 
@@ -41,7 +43,7 @@ registerLocaleData(localePt)
     SalesComponent,
     BusinessFormComponent,
     BusinessProductComponent,
-    BusinessFormComponent
+    BusinessPaymentComponent
   ],
   imports: [
     AppRoutingModule,
@@ -51,6 +53,7 @@ registerLocaleData(localePt)
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
+    MatCheckboxModule,
     MatDatepickerModule,
     MatDividerModule,
     MatFormFieldModule,

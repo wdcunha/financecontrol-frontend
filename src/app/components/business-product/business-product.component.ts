@@ -1,14 +1,15 @@
-import { Product } from './../../models/product.model';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Business } from 'src/app/models/business.model';
 import { BusinessProduct } from './../../models/business-product.model';
+import { Product } from './../../models/product.model';
 import { BusinessProductService } from './../../services/business-product.service';
 import { BusinessService } from './../../services/business.service';
-import { Business } from 'src/app/models/business.model';
 import { ProductService } from './../../services/product.service';
-import { Observable } from 'rxjs';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Utils } from './../../shared/utils';
 
 @Component({
   selector: 'app-business-product',
@@ -19,9 +20,9 @@ export class BusinessProductComponent implements OnInit {
 
   @Input() businessObj: Business = new Business();
   @Input() businessTitle: string = '';
-  @Input() businessType: number = 0;
 
   business$!: Observable<Business[]>;
+  busnProdList: BusinessProduct[] = [];
   edit: boolean = false;
   produtcOptions!: FormGroup;
   product$!: Observable<Product[]>;
@@ -41,10 +42,11 @@ export class BusinessProductComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.resetForm();
       this.addProduct();
-      console.log(this.businessType);
-      console.log(params.type);
 
-      this.business$ = this.businessServ.getAllBusiness(params.type);
+      if(this.edit) {
+        this.business$ = this.businessServ.getAllBusiness(params.type);
+      }
+      //TODO: funcionalidade precisa de ajuste que será basicamente usada pra editar
       this.setDefaultValue();
     });
   }
@@ -62,24 +64,22 @@ export class BusinessProductComponent implements OnInit {
   }
 
   newFormGroup(): FormGroup {
+    let numPattern = "[0-9]*"
     return this.fb.group({
-      businessSelection: new FormControl([null, Validators.required]),
-      productSelection: new FormControl([null, Validators.required]),
-      qty: new FormControl([null]),
-      price: new FormControl([null]),
+      businessSelection: new FormControl(null),
+      productSelection: new FormControl(null, Validators.required),
+      qty: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
+      price: new FormControl(null, [Validators.required, Validators.pattern('[0-9,]*')]),
     });
   }
 
   setDefaultValue() {
     const selectedType = this.businessObj
-    console.log(selectedType);
 
     this.produtcOptions.get('businessSelection')?.setValue(selectedType);
   }
 
-  onSubmit() {
-    const busnProdList: BusinessProduct[] = [];
-
+  getBusnProdFormFields(business: Business) {
     (this.produtcOptions.controls.products as FormArray).controls.forEach(x => {
 
       const busnProd: BusinessProduct = {
@@ -91,22 +91,27 @@ export class BusinessProductComponent implements OnInit {
 
       if(x != undefined && x != null ) {
         busnProd.product = x.get('productSelection')?.value;
-        busnProd.business = this.businessObj;
-        busnProd.price = x.get('price')?.value;
+        busnProd.business = business;
+        busnProd.price = Utils.strToDouble(x.get('price')?.value);
         busnProd.quantity = x.get('qty')?.value;
 
-        busnProdList.push(busnProd);
+        this.busnProdList.push(busnProd);
       }
     });
+  }
 
-    this.businessProdServ.saveBusinessProduct(busnProdList).subscribe(() => {
+  onSubmit(business: Business) {
+
+    this.getBusnProdFormFields(business);
+
+    this.businessProdServ.saveBusinessProduct(this.busnProdList).subscribe(() => {
       console.warn("Registro de produtos da " + this.title + " de nº " + this.businessObj.id);
       this.snackBar.open(`Registro de produtos da ${this.title} de nº ${this.businessObj.id}`, 'Salvo com Sucesso!', {
               duration: 15000,
       });
     });
 
-    // this.resetForm();
+    this.resetForm();
   }
 
   resetForm() {

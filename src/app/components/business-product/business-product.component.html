@@ -31,18 +31,23 @@
             </mat-select>
             <mat-label>Selecione um produto</mat-label>
             <mat-hint>Selecione o produto adquirido</mat-hint>
+            <mat-error *ngIf="productsFields().controls[prodIndex].get('productSelection')?.hasError('required')">Produto é um item necessário</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Quantidade</mat-label>
             <input matInput placeholder="Informe a quantidade" formControlName="qty">
             <mat-hint>Quantidade do produto adquirido</mat-hint>
+            <mat-error *ngIf="productsFields().controls[prodIndex].get('qty')?.hasError('required')">Quantidade é um item importante</mat-error>
+            <mat-error *ngIf="productsFields().controls[prodIndex].get('qty')?.hasError('pattern')">Digite apenas números sem ponto ou vírgula</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Preço</mat-label>
             <input matInput placeholder="Informe o valor unitário" formControlName="price">
             <mat-hint>Preço unitário do produto adquirido</mat-hint>
+            <mat-error *ngIf="productsFields().controls[prodIndex].get('price')?.hasError('required')">Preço é essencial para controle</mat-error>
+            <mat-error *ngIf="productsFields().controls[prodIndex].get('price')?.hasError('pattern')">Digite apenas números, permitido vírgula</mat-error>
           </mat-form-field>
 
           <button mat-mini-fab color="warn"
@@ -55,8 +60,11 @@
         </div>
       </ng-container>
 
-      <div class="margin-top-15px">
-        <button mat-raised-button color="primary" [disabled]="!produtcOptions.valid" (click)="onSubmit()">Salvar</button>
+      <div class="margin-top-15px" [ngClass]="{'hidden': !edit}">
+        <button mat-raised-button color="primary"
+          [disabled]="!produtcOptions.valid"
+          (click)="onSubmit(businessObj)"
+        >Salvar</button>
         <button mat-raised-button class="margin-left-10px" (click)="resetForm()">Cancelar</button>
       </div>
     </form>

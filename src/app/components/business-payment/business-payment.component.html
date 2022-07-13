@@ -1,0 +1,88 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-subtitle>Formas de pagamento
+      <button mat-mini-fab color="accent"
+        [disabled]="!paymentForm.valid"
+        (click)="addPaymentFields()"
+        class="margin-left-10px"
+      >
+        <mat-icon>library_add</mat-icon>
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="paymentForm">
+      <ng-container
+      formArrayName="payments"
+      *ngFor="let prod of paymentFields().controls; let payIndex=index">
+        <div [formGroupName]="payIndex" class="margin-bottom-15px">
+          <mat-form-field appearance="outline" [ngClass]="{'hidden': !edit}">
+            <mat-select placeholder="{{ businessTitle }} associada" formControlName="businessSelection">
+              <mat-option *ngFor="let bus of business$ | async" [value]="bus">{{ bus.id }} - {{ bus.entity.name }}</mat-option>
+
+            </mat-select>
+            <mat-label>Selecione uma {{ businessTitle }}</mat-label>
+            <mat-hint>{{ businessTitle }} associada</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-select placeholder="Selecione uma forma de pagamento" formControlName="paymentSelection">
+              <mat-option *ngFor="let pay of payTypes$ | async" [value]="pay">{{ pay.description }}</mat-option>
+            </mat-select>
+            <mat-label>Selecione uma forma de pagamento</mat-label>
+            <mat-hint>Selecione a forma como foi pago</mat-hint>
+            <mat-error *ngIf="paymentFields().controls[payIndex].get('paymentSelection')?.hasError('required')">Nenhuma forma de pagto selecionada</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" name="paymentDate" formControlName="paymentDate">
+            <mat-hint>DD/MM/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker [startAt]="startDate"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Parcelas</mat-label>
+            <input matInput placeholder="Número de parcelas" formControlName="installment" (blur)="calculateInstallmentValue($event)">
+            <mat-hint>Quantidade das parcelas</mat-hint>
+            <mat-error *ngIf="paymentFields().controls[payIndex].get('installment')?.hasError('required')">É necessária a quantidade para calcular</mat-error>
+            <mat-error *ngIf="paymentFields().controls[payIndex].get('installment')?.hasError('pattern')">Digite apenas números sem ponto ou vírgula</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Valor</mat-label>
+            <input matInput placeholder="Informe o valor da parcela" formControlName="installmentValue">
+            <mat-hint>Valor da parcela</mat-hint>
+            <mat-error *ngIf="paymentFields().controls[payIndex].get('installmentValue')?.hasError('required')">É preciso valor para calcular</mat-error>
+            <mat-error *ngIf="paymentFields().controls[payIndex].get('installmentValue')?.hasError('pattern')">Digite apenas números, permitido vírgula</mat-error>
+          </mat-form-field>
+
+          <mat-checkbox class="paid-chkbox" color="primary" formControlName="paidChkbox">Pago</mat-checkbox>
+
+          <button mat-mini-fab color="warn"
+            (click)="removePayment(payIndex)"
+            class="margin-left-10px"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+
+      <div class="margin-top-15px" [ngClass]="{'hidden': !edit}">
+        <button mat-raised-button
+          color="primary"
+          [disabled]="!paymentForm.valid"
+          (click)="onSubmit(businessObj)"
+        >Salvar</button>
+        <button mat-raised-button class="margin-left-10px" (click)="resetForm()">Cancelar</button>
+      </div>
+    </form>
+  </mat-card-content>
+  <ng-template #loading>
+    <div class="loading-spinner">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+</mat-card>
+

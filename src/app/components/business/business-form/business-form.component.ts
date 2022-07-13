@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -15,6 +15,8 @@ import { BusinessService } from '../../../services/business.service';
 import { PersonService } from '../../../services/person.service';
 import { BusinessType } from './../../../models/business-type.model';
 import { Business } from './../../../models/business.model';
+import { BusinessPaymentComponent } from './../../business-payment/business-payment.component';
+import { BusinessProductComponent } from './../../business-product/business-product.component';
 
 @Component({
   selector: 'app-form-business',
@@ -22,6 +24,13 @@ import { Business } from './../../../models/business.model';
   styleUrls: ['./business-form.component.scss'],
 })
 export class BusinessFormComponent implements OnInit {
+
+  @ViewChild(BusinessProductComponent)
+  private businessProdComp!: BusinessProductComponent;
+
+  @ViewChild(BusinessPaymentComponent)
+  private businessPayComp!: BusinessPaymentComponent;
+
   businessObj: Business = new Business();
   businesType: BusinessType = new BusinessType();
   businesType$: BusinessType[] = [];
@@ -67,7 +76,7 @@ export class BusinessFormComponent implements OnInit {
         case '2': {
           this.title = 'Venda';
           this.entityType = 'Cliente';
-          this.businessTypeId = 2;
+          this.businessTypeId = params.type;
           this.businessTypeDescrip = 'Tipo Negócio';
           this.formType = 'saída';
           this.setEntitiesByBusinessType(1);
@@ -121,16 +130,20 @@ export class BusinessFormComponent implements OnInit {
       entity: entitySelected,
       notes: notesh
     }
+
     this.bs.saveBusiness(busn).subscribe(saved => {
-      console.warn("Registro de " + this.title + " " + saved.id + ", " + saved.entity);
+      console.warn("Registro de " + this.title + " " + saved.id + ", " + saved.entity.name);
 
       this.businessObj = saved;
-      this.isSaved = true;
-      this.options.disable();
+      this.businessProdComp.onSubmit(saved);
+      this.businessPayComp.onSubmit(saved);
+
 
       this.snackBar.open(`Registro de  ${this.title}, ${saved.id}, ${saved.entity.name}`, 'Salvo com Sucesso!', {
         duration: 15000,
       });
+
+      this.resetForm();
     });
   }
 

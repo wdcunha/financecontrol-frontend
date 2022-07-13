@@ -1,4 +1,6 @@
-export interface PaymentTypes {
-  id: number;
-  description: string;
+export class PaymentTypes {
+  id?: number;
+  description: string = '';
+
+  constructor() {}
 }

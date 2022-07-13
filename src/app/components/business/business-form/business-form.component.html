@@ -38,19 +38,31 @@
         <mat-hint>Lançar qualquer detalhe importante</mat-hint>
       </mat-form-field>
 
-      <div class="margin-top-15px" *ngIf="isSaved">
-        <button mat-raised-button color="warn" [disabled]="!options.valid" (click)="onSubmit()">Salvar</button>
-        <button mat-raised-button class="margin-left-10px" (click)="resetForm()">Cancelar</button>
-      </div>
-    </form>
-    isSaved {{isSaved}}
-    <div *ngIf="isSaved">
-      <app-business-product
+    <ng-container>
+      <app-business-product #busnProd
         [businessObj]="businessObj"
         [businessTitle]="title"
-        [businessType]="businessTypeId">
+      >
       </app-business-product>
+    </ng-container>
+    <ng-container>
+      <app-business-payment #busnPay
+        [businessObj]="businessObj"
+        [businessTitle]="title"
+      >
+      </app-business-payment>
+    </ng-container>
+
+    <div class="margin-top-15px">
+      <button mat-raised-button
+        color="warn"
+        [disabled]="!options.valid"
+        (click)="onSubmit()">Salvar
+      </button>
+      <button mat-raised-button class="margin-left-10px" (click)="resetForm()">Cancelar</button>
     </div>
+  </form>
+
   </mat-card-content>
   <ng-template #loading>
     <div class="loading-spinner">
