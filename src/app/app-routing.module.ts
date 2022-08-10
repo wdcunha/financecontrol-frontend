@@ -12,8 +12,8 @@ const routes: Routes = [
   { path: 'person', component: PersonComponent },
   { path: 'type-person', component: TypePersonComponent },
   { path: 'product', component: ProductComponent },
-  { path: 'business', component: BusinessComponent },
-  { path: 'business-form', component: BusinessFormComponent },
+  { path: 'business/:type', component: BusinessComponent },
+  { path: 'business-form/:type', component: BusinessFormComponent },
 ];
 
 @NgModule({
