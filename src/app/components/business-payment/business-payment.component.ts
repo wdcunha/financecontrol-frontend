@@ -1,3 +1,4 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,10 +21,10 @@ export class BusinessPaymentComponent implements OnInit {
 
   @Input() businessObj: Business = new Business();
   @Input() businessTitle: string = '';
-  // @Output() businessPayment = new EventEmitter<BusinessPayment[]>();
 
   business$!: Observable<Business[]>;
   busnPayList: BusinessPayment[] = [];
+  calc: number = 0;
   edit: boolean = false;
   paymentForm!: FormGroup;
   payTypes$!: Observable<PaymentTypes[]>;
@@ -35,7 +36,8 @@ export class BusinessPaymentComponent implements OnInit {
       private businessServ: BusinessService,
       private businPayServ: BusinessPaymentService,
       private snackBar: MatSnackBar,
-      private fb: FormBuilder
+      private fb: FormBuilder,
+      private decimalPipe: DecimalPipe
       ) { }
 
   ngOnInit(): void {
@@ -58,6 +60,7 @@ export class BusinessPaymentComponent implements OnInit {
 
   addPaymentFields() {
     this.paymentFields().push(this.newFormGroup());
+    this.getFormFields(this.businessObj);
   }
 
   removePayment(index: number) {
@@ -65,12 +68,15 @@ export class BusinessPaymentComponent implements OnInit {
   }
 
   newFormGroup(): FormGroup {
+    let onlyNumbers = "[0-9]*";
+    let onlyNumbersAndDecimal = "[0-9.,]*";
+
     return this.fb.group({
       paymentDate: new FormControl(this.startDate),
       businessSelection: new FormControl(null),
       paymentSelection: new FormControl(null, Validators.required),
-      installment: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
-      installmentValue: new FormControl(null, [Validators.required, Validators.pattern('[0-9,]*')]),
+      installment: new FormControl(null, [Validators.required, Validators.pattern(onlyNumbers)]),
+      installmentValue: new FormControl(null, [Validators.required, Validators.pattern(onlyNumbersAndDecimal)]),
       paidChkbox: new FormControl(false),
     });
   }
@@ -85,50 +91,82 @@ export class BusinessPaymentComponent implements OnInit {
     (this.paymentForm.controls.payments as FormArray).controls.forEach(formArr => {
 
       let busnPay: BusinessPayment = new BusinessPayment();
-      this.busnPayList = [];
 
-      if(formArr != undefined && formArr != null ) {
+      if(formArr != undefined && formArr != null && business.id != null) {
         const installOrig = formArr.get('installment')?.value;
+        const paymentType = formArr.get('paymentSelection')?.value;
 
         for (let index = 1; index <= installOrig; index++) {
           busnPay = new BusinessPayment();
 
           busnPay.amount = Utils.strToDouble(formArr.get('installmentValue')?.value);
-          busnPay.payDate = Utils.incrementMonth(formArr.get('paymentDate')?.value, index);
-          console.log(Utils.incrementMonth(formArr.get('paymentDate')?.value, index));
+          if (paymentType.description == 'Dinheiro') {
+            console.log('dinheiro');
+            busnPay.payDate = Utils.formatYmd(formArr.get('paymentDate')?.value);
+          } else {
+            console.log('outras formas');
+            busnPay.payDate = Utils.incrementMonth(formArr.get('paymentDate')?.value, index);
+          }
+          busnPay.amount = formArr.get('installmentValue')?.value;
           busnPay.payed = formArr.get('paidChkbox')?.value;
           busnPay.payment = formArr.get('paymentSelection')?.value;
           busnPay.business = business;
 
           busnPay.installment = index;
-          console.log(busnPay);
 
           this.busnPayList.push(busnPay);
-          console.log(this.busnPayList);
-
         }
         // busnPay.business = x.get('businessSelection')?.value; TODO: colocar num if pra qdo for edit
       }
     });
   }
 
+  calculateInstallmentValue(value: any, index: number) {
+    const size = (this.paymentForm.controls.payments as FormArray).length;
+
+    let total: string = '0';
+    if (this.businessObj.total?.toString !== undefined && size == 1) {
+      total = this.businessObj.total;
+
+      this.calc = Number(total) / Number(value.target.value);
+
+      console.log(this.calc);
+
+    } else {
+      console.log(this.calc);
+      this.calc = this.calc / Number(value.target.value);
+      console.log(this.calc);
+    }
+
+    console.log(this.calc);
+
+
+    (this.paymentForm.controls.payments as FormArray).at(index).get('installmentValue')?.patchValue(this.calc);
+
+  }
+
+  updateCalc(index: number) {
+
+    if (value != this.calc) {
   calculateInstallmentValue(value: any) {
     console.log(value.target.value);
 
+      this.calc = this.calc - Number(value);
+    }
+    console.log(this.calc);
   }
 
   onSubmit(business: Business) {
     this.getFormFields(business);
-
-    console.log(this.busnPayList);
 
     this.businPayServ.saveBusinessPayment(this.busnPayList).subscribe(() => {
       console.warn("Registro de pagamento com nº " + this.businessObj.id);
       this.snackBar.open(`Registro de pagamento com nº ${this.businessObj.id}`, 'Salvo com Sucesso!', {
               duration: 15000,
       });
+      this.resetForm();
+      this.addPaymentFields();
+      this.busnPayList = [];
     });
-
-    this.newFormGroup();
   }
 }

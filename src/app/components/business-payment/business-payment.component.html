@@ -44,7 +44,11 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Parcelas</mat-label>
-            <input matInput placeholder="Número de parcelas" formControlName="installment" (blur)="calculateInstallmentValue($event)">
+            <input matInput
+              placeholder="Número de parcelas"
+              formControlName="installment"
+              (blur)="calculateInstallmentValue($event, payIndex)"
+            >
             <mat-hint>Quantidade das parcelas</mat-hint>
             <mat-error *ngIf="paymentFields().controls[payIndex].get('installment')?.hasError('required')">É necessária a quantidade para calcular</mat-error>
             <mat-error *ngIf="paymentFields().controls[payIndex].get('installment')?.hasError('pattern')">Digite apenas números sem ponto ou vírgula</mat-error>
@@ -52,7 +56,11 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Valor</mat-label>
-            <input matInput placeholder="Informe o valor da parcela" formControlName="installmentValue">
+            <input matInput currencyMask
+              placeholder="Informe o valor da parcela"
+              formControlName="installmentValue"
+              (blur)="updateCalc(payIndex)"
+            >
             <mat-hint>Valor da parcela</mat-hint>
             <mat-error *ngIf="paymentFields().controls[payIndex].get('installmentValue')?.hasError('required')">É preciso valor para calcular</mat-error>
             <mat-error *ngIf="paymentFields().controls[payIndex].get('installmentValue')?.hasError('pattern')">Digite apenas números, permitido vírgula</mat-error>
@@ -61,10 +69,10 @@
           <mat-checkbox class="paid-chkbox" color="primary" formControlName="paidChkbox">Pago</mat-checkbox>
 
           <button mat-mini-fab color="warn"
+            [disabled]="!paymentForm.valid"
             (click)="removePayment(payIndex)"
             class="margin-left-10px"
-          >
-            <mat-icon>delete</mat-icon>
+          ><mat-icon>delete</mat-icon>
           </button>
         </div>
       </ng-container>

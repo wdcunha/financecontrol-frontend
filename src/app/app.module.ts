@@ -1,3 +1,4 @@
+import { DecimalPipe } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import localePt from '@angular/common/locales/pt';
@@ -30,8 +31,22 @@ import { TypePersonComponent } from './components/type-person/type-person.compon
 import { BusinessProductComponent } from './components/business-product/business-product.component';
 import { BusinessPaymentComponent } from './components/business-payment/business-payment.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { CurrencyMaskInputMode, CurrencyMaskConfig, NgxCurrencyModule } from 'ngx-currency';
 
 registerLocaleData(localePt)
+
+export const customCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: "right",
+  allowNegative: true,
+  allowZero: true,
+  decimal: ",",
+  precision: 2,
+  prefix: "R$ ",
+  suffix: "",
+  thousands: ".",
+  nullable: true,
+  inputMode: CurrencyMaskInputMode.FINANCIAL
+};
 
 @NgModule({
   declarations: [
@@ -67,11 +82,14 @@ registerLocaleData(localePt)
     MatTableModule,
     MatToolbarModule,
     ReactiveFormsModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
   ],
   providers: [{
       provide: LOCALE_ID,
       useValue: "pt-BR"
-    }],
+    },
+    DecimalPipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
