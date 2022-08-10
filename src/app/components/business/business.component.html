@@ -9,21 +9,25 @@
         <ng-container matColumnDef="cod">
           <th mat-header-cell *matHeaderCellDef>Cod</th>
           <td mat-cell *matCellDef="let business">{{ business.id }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="provider">
           <th mat-header-cell *matHeaderCellDef>{{ entity }}</th>
           <td mat-cell *matCellDef="let business">{{ business.entity.name }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="occurenceDate">
           <th mat-header-cell *matHeaderCellDef>Data</th>
           <td mat-cell *matCellDef="let business">{{ business.businessDate }}</td>
+          <td mat-footer-cell *matFooterCellDef><strong>Total: </strong></td>
         </ng-container>
 
         <ng-container matColumnDef="businessAmount">
           <th mat-header-cell *matHeaderCellDef>Total Compra</th>
           <td mat-cell *matCellDef="let business">{{ business.businessTotal | currency:'BRL' }}</td>
+          <td mat-footer-cell *matFooterCellDef><strong>{{ totalValue | currency:'BRL' }}</strong></td>
         </ng-container>
 
         <ng-container matColumnDef="payment">
@@ -31,25 +35,29 @@
           <td mat-cell *matCellDef="let business">
             <p *ngFor="let pay of business.countIntallments | keyvalue">{{ pay.key }}</p>
           </td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="installments">
-          <th mat-header-cell *matHeaderCellDef>x vezes</th>
+          <th mat-header-cell *matHeaderCellDef>Parcelas</th>
           <td mat-cell *matCellDef="let business">
             <p *ngFor="let pay of business.countIntallments | keyvalue">{{ pay.value }}</p>
           </td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="value">
-          <th mat-header-cell *matHeaderCellDef>Parcelas (R$)</th>
+          <th mat-header-cell *matHeaderCellDef>Valor (R$)</th>
           <td mat-cell *matCellDef="let business">
             <p *ngFor="let pay of business.intallmentsValues">{{ pay | currency:'BRL' }}</p>
           </td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="notes">
           <th mat-header-cell *matHeaderCellDef>Observações</th>
           <td mat-cell *matCellDef="let business">{{ business.notes }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
@@ -104,11 +112,12 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let business; columns: displayedColumns;"
-          class="element-row"
-          [class.expanded-row]="expandedElement === business"
-          (click)="expandedElement = expandedElement === business ? null : business">
-        </tr>
-        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+        class="element-row"
+        [class.expanded-row]="expandedElement === business"
+        (click)="expandedElement = expandedElement === business ? null : business">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
       </table>
     </div>
   </mat-card-content>
