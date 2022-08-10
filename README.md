@@ -1,5 +1,20 @@
-# FinancecontrolFrontend
+# Finance control Frontend
 
+### Sales/Purchase record screen
+
+This screen is compound by 3 components: business, products and payments.
+
+Products has calculation per product by quantity and a total for all typed ones.
+
+Payment types has calculation when blur from Installment field and the result is filled out in Value field and in case to have more than one line, when exit from Value field will calculate the new value if the sugested value has been changed and fill out the next Value field in the new form array
+
+### Sales/Purchase list screen
+
+Here is listed all Sales/Purchase and it will have a filter that allows the user choose criterias according to his/her needs.
+
+The table has in its footer the total value of the registers retrieved, which can be changed as the user set filters.
+
+### Technical Information
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.5.
 
 Command to generate a model:
@@ -39,3 +54,25 @@ Selecting products in Business was a challange in the meaning of having several 
 Sending BusinessProduct to the Backend has first to deserialize data from form fields because the form value sent as object and the API waits for array, that's why an array variable was createad within onSubmit method to be sent as parameter to the post service. So it's important to notice that FormArray deliever fields differently, then be aware about the content type is essencial to not have error in the backend that has not much evidence of what is causing it: ```Cannot deserialize value of type `java.util.ArrayList<com.gswf.financecontrol.model.BusinessProduct>` from Object value (token `JsonToken.START_OBJECT`)```, and I found in a post a comment that saved much time of headaches (Error ao usar o post no postman)[https://www.guj.com.br/t/error-ao-usar-o-post-no-postman/422933].
 
 A function used to check the number of month days was found in a page about (getting number of days in month)[https://bobbyhadz.com/blog/javascript-get-number-of-days-in-month].
+
+
+A tricky error was about a null value for nothesh in business-form when field was empty then saving it got error from backend. It was tried to introduce just a simple if to check if it was equal null, but it didn't work even seeing the value in a console.log, so I found a post in stackoverflow about using double bang (!!)
+
+It's possible to get all element in the form using getRawValue: 
+
+```const teste = this.paymentForm.getRawValue();```
+```teste.payments.forEach((x: any) => console.log(x.installment));```
+
+Instead of using the one FormArray:
+
+```(this.paymentForm.controls.payments as FormArray).controls.forEach(x => ```
+```console.log(x.installment))```
+
+Error of undefined is something really commum and the solution vary as the case:
+
+```Type 'number | undefined' is not assignable to type 'number'.```
+```Type 'undefined' is not assignable to type 'number'.ts(2322)```
+
+Sometimes this error is fixed by putting Number to cast or the bang sign, but in some cases it is not enough, as in business component in method calcTotal that was used 'as a number' and the problem was solved.
+
+When a field has its value shared for other purposes and need to have the value as double type, a solution indicate by Taruga was use currencyMask in the input tag as in the business payment form for Valor and in the business product as well.

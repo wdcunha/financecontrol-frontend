@@ -2,7 +2,7 @@
   <mat-card-header>
     <mat-card-subtitle>Seleção de {{ title }}
       <button mat-mini-fab color="accent"
-        [disabled]="!produtcOptions.valid"
+        [disabled]="!productOptions.valid"
         (click)="addProduct()"
         class="margin-left-10px"
       >
@@ -11,7 +11,7 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <form [formGroup]="produtcOptions">
+    <form [formGroup]="productOptions">
       <ng-container
       formArrayName="products"
       *ngFor="let prod of productsFields().controls; let prodIndex=index">
@@ -36,7 +36,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Quantidade</mat-label>
-            <input matInput placeholder="Informe a quantidade" formControlName="qty">
+            <input matInput type="number" placeholder="Informe a quantidade" formControlName="qty">
             <mat-hint>Quantidade do produto adquirido</mat-hint>
             <mat-error *ngIf="productsFields().controls[prodIndex].get('qty')?.hasError('required')">Quantidade é um item importante</mat-error>
             <mat-error *ngIf="productsFields().controls[prodIndex].get('qty')?.hasError('pattern')">Digite apenas números sem ponto ou vírgula</mat-error>
@@ -44,25 +44,36 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Preço</mat-label>
-            <input matInput placeholder="Informe o valor unitário" formControlName="price">
+            <input matInput currencyMask placeholder="Informe o valor unitário" formControlName="price">
             <mat-hint>Preço unitário do produto adquirido</mat-hint>
             <mat-error *ngIf="productsFields().controls[prodIndex].get('price')?.hasError('required')">Preço é essencial para controle</mat-error>
             <mat-error *ngIf="productsFields().controls[prodIndex].get('price')?.hasError('pattern')">Digite apenas números, permitido vírgula</mat-error>
           </mat-form-field>
 
+          <mat-form-field>
+            <input matInput disabled>
+            <span class="padding-left-bottom-10px">{{ calcProdValue(prodIndex) | currency:'BRL' }}</span>
+          </mat-form-field>
+
           <button mat-mini-fab color="warn"
-            [disabled]="!produtcOptions.valid"
+            [disabled]="!productOptions.valid"
             (click)="removeProduct(prodIndex)"
             class="margin-left-10px"
-          >
-            <mat-icon>delete</mat-icon>
+          ><mat-icon>delete</mat-icon>
           </button>
         </div>
       </ng-container>
 
+      <ng-container>
+        <mat-form-field class="margin-left-10px">
+          <mat-label>Total</mat-label>
+          <input matInput disabled>{{ calcTotal() | currency:'BRL' }}
+        </mat-form-field>
+      </ng-container>
+
       <div class="margin-top-15px" [ngClass]="{'hidden': !edit}">
         <button mat-raised-button color="primary"
-          [disabled]="!produtcOptions.valid"
+          [disabled]="!productOptions.valid"
           (click)="onSubmit(businessObj)"
         >Salvar</button>
         <button mat-raised-button class="margin-left-10px" (click)="resetForm()">Cancelar</button>

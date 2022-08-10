@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -9,7 +9,6 @@ import { Product } from './../../models/product.model';
 import { BusinessProductService } from './../../services/business-product.service';
 import { BusinessService } from './../../services/business.service';
 import { ProductService } from './../../services/product.service';
-import { Utils } from './../../shared/utils';
 
 @Component({
   selector: 'app-business-product',
@@ -20,11 +19,12 @@ export class BusinessProductComponent implements OnInit {
 
   @Input() businessObj: Business = new Business();
   @Input() businessTitle: string = '';
+  @Output() businessProdChanges: EventEmitter<string> = new EventEmitter();
 
   business$!: Observable<Business[]>;
   busnProdList: BusinessProduct[] = [];
   edit: boolean = false;
-  produtcOptions!: FormGroup;
+  productOptions!: FormGroup;
   product$!: Observable<Product[]>;
   title: string = 'Produtos';
 
@@ -34,7 +34,7 @@ export class BusinessProductComponent implements OnInit {
     private businessServ: BusinessService,
     private businessProdServ: BusinessProductService,
     private snackBar: MatSnackBar,
-    private fb: FormBuilder
+    private fb: FormBuilder,
     ) { }
 
   ngOnInit(): void {
@@ -52,7 +52,7 @@ export class BusinessProductComponent implements OnInit {
   }
 
   productsFields(): FormArray {
-    return this.produtcOptions.get('products') as FormArray;
+    return this.productOptions.get('products') as FormArray;
   }
 
   addProduct() {
@@ -64,23 +64,25 @@ export class BusinessProductComponent implements OnInit {
   }
 
   newFormGroup(): FormGroup {
-    let numPattern = "[0-9]*"
+    let onlyNumbers = "[0-9]*";
+    let onlyNumbersAndDecimal = "[0-9,.]*";
+
     return this.fb.group({
       businessSelection: new FormControl(null),
       productSelection: new FormControl(null, Validators.required),
-      qty: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
-      price: new FormControl(null, [Validators.required, Validators.pattern('[0-9,]*')]),
+      qty: new FormControl(null, [Validators.required, Validators.pattern(onlyNumbers)]),
+      price: new FormControl(null, [Validators.required, Validators.pattern(onlyNumbersAndDecimal)]),
     });
   }
 
   setDefaultValue() {
     const selectedType = this.businessObj
 
-    this.produtcOptions.get('businessSelection')?.setValue(selectedType);
+    this.productOptions.get('businessSelection')?.setValue(selectedType);
   }
 
   getBusnProdFormFields(business: Business) {
-    (this.produtcOptions.controls.products as FormArray).controls.forEach(x => {
+    (this.productOptions.controls.products as FormArray).controls.forEach(x => {
 
       const busnProd: BusinessProduct = {
         product: new Product(),
@@ -92,7 +94,7 @@ export class BusinessProductComponent implements OnInit {
       if(x != undefined && x != null ) {
         busnProd.product = x.get('productSelection')?.value;
         busnProd.business = business;
-        busnProd.price = Utils.strToDouble(x.get('price')?.value);
+        busnProd.price = x.get('price')?.value;
         busnProd.quantity = x.get('qty')?.value;
 
         this.busnProdList.push(busnProd);
@@ -100,6 +102,23 @@ export class BusinessProductComponent implements OnInit {
     });
   }
 
+  calcProdValue(index: number): number {
+    const prod = (this.productOptions.controls.products as FormArray).at(index)
+
+    const price = prod.get('price')?.value;
+    const qtd = prod.get('qty')?.value;
+
+    return price * qtd;
+  }
+
+  calcTotal() {
+    const priceTotal = (this.productOptions.controls.products as FormArray).controls
+    .map(x => x.get('price')?.value * x.get('qty')?.value)
+    .filter(x => x > 0)
+    .reduce((acc, val) => acc + val, 0);
+
+    return priceTotal;
+  }
   onSubmit(business: Business) {
 
     this.getBusnProdFormFields(business);
@@ -112,11 +131,15 @@ export class BusinessProductComponent implements OnInit {
     });
 
     this.resetForm();
+    this.addProduct();
   }
 
   resetForm() {
-    this.produtcOptions = this.fb.group({
+    this.productOptions = this.fb.group({
       products: this.fb.array([])
+    });
+    this.productOptions.valueChanges.subscribe(() => {
+      this.businessProdChanges.emit(`${this.calcTotal()}`);
     });
   }
 }

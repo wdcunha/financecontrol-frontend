@@ -9,6 +9,9 @@ export class Business {
   businessProducts?: BusinessProduct[];
   businessPayments?: BusinessPayment[];
   businessType: BusinessType = new BusinessType();
+  businessTotal?: number;
+  intallmentsValues? = [];
   entity: Person = new Person();
   notes: string = '';
+  total?: string = '';
 }

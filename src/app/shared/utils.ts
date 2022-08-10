@@ -59,9 +59,12 @@ export class Utils {
 
     let re = /,/gi;
 
-    let strToDouble: number = +str.replace(re, ".");
+    let strToDouble: number = 0;
+
+    if(str != null) {
+      strToDouble = Number(str.replace(re, "."));
+    }
 
     return strToDouble;
   }
-
 }
