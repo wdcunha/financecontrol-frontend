@@ -13,6 +13,7 @@ import { Person } from 'src/app/models/person.model';
 import { BusinessTypeService } from '../../../services/business-type.service';
 import { BusinessService } from '../../../services/business.service';
 import { PersonService } from '../../../services/person.service';
+import { BusinessProduct } from './../../../models/business-product.model';
 import { BusinessType } from './../../../models/business-type.model';
 import { Business } from './../../../models/business.model';
 import { BusinessPaymentComponent } from './../../business-payment/business-payment.component';
@@ -32,6 +33,7 @@ export class BusinessFormComponent implements OnInit {
   private businessPayComp!: BusinessPaymentComponent;
 
   businessObj: Business = new Business();
+  busnProdList: BusinessProduct[] = [];
   businesType: BusinessType = new BusinessType();
   businesType$: BusinessType[] = [];
   businessTypeDescrip!: string;
@@ -61,22 +63,22 @@ export class BusinessFormComponent implements OnInit {
 
     this.entities$ = this.personServ.getAllPersons();
 
-    this.route.queryParams.subscribe((params) => {
+    this.route.params.subscribe((params) => {
       this.resetForm();
       switch (params.type) {
-        case '1': {
+        case 'compra': {
           this.title = 'Compra';
           this.entityType = 'Fornecedor';
-          this.businessTypeId = params.type;
+          this.businessTypeId = 1;
           this.businessTypeDescrip = 'Tipo Negócio';
           this.formType = 'entrada';
           this.setEntitiesByBusinessType(2);
           break;
         }
-        case '2': {
+        case 'venda': {
           this.title = 'Venda';
           this.entityType = 'Cliente';
-          this.businessTypeId = params.type;
+          this.businessTypeId = 2;
           this.businessTypeDescrip = 'Tipo Negócio';
           this.formType = 'saída';
           this.setEntitiesByBusinessType(1);
@@ -123,7 +125,8 @@ export class BusinessFormComponent implements OnInit {
     const dpicker = this.options.get('occuranceDate')?.value;
     const entitySelected = this.options.get('entities')?.value;
     const btype = this.options.get('bustype')?.value;
-    const notesh = this.options.get('noteText')?.value;
+    const notesh: string = this.options.get('noteText')?.value.toString();
+
     const busn: Business = {
       businessDate: formatYmd(dpicker),
       businessType: btype,
@@ -132,19 +135,27 @@ export class BusinessFormComponent implements OnInit {
     }
 
     this.bs.saveBusiness(busn).subscribe(saved => {
-      console.warn("Registro de " + this.title + " " + saved.id + ", " + saved.entity.name);
+      console.warn("Registro de " + this.title + "(" + saved.businessType.id + ") nº " + saved.id + ", " + saved.entity.name + ", " + saved.notes);
 
       this.businessObj = saved;
       this.businessProdComp.onSubmit(saved);
       this.businessPayComp.onSubmit(saved);
 
-
-      this.snackBar.open(`Registro de  ${this.title}, ${saved.id}, ${saved.entity.name}`, 'Salvo com Sucesso!', {
+      this.snackBar.open(`Registro de ${this.title}, ${saved.id}, ${saved.entity.name}`, 'Salvo com Sucesso!', {
         duration: 15000,
       });
 
       this.resetForm();
+      this.setDefaultValue();
     });
+  }
+  getBusProdData() {
+    this.businessProdComp.getBusnProdFormFields(this.businessObj);
+    this.busnProdList = this.businessProdComp.busnProdList;
+  }
+
+  onBusnProdChanges(value: string) {
+    this.businessObj.total = value;
   }
 
   resetForm() {
@@ -154,5 +165,14 @@ export class BusinessFormComponent implements OnInit {
       bustype: new FormControl([null]),
       noteText: new FormControl([null]),
     });
+    this.setDefaultValue();
+  }
+
+  resetAllForms() {
+    this.resetForm();
+    this.businessProdComp.resetForm();
+    this.businessProdComp.addProduct();
+    this.businessPayComp.resetForm();
+    this.businessPayComp.addPaymentFields();
   }
 }

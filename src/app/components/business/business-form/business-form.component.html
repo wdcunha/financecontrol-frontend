@@ -38,30 +38,31 @@
         <mat-hint>Lançar qualquer detalhe importante</mat-hint>
       </mat-form-field>
 
-    <ng-container>
-      <app-business-product #busnProd
-        [businessObj]="businessObj"
-        [businessTitle]="title"
-      >
-      </app-business-product>
-    </ng-container>
-    <ng-container>
-      <app-business-payment #busnPay
-        [businessObj]="businessObj"
-        [businessTitle]="title"
-      >
-      </app-business-payment>
-    </ng-container>
+      <ng-container>
+        <app-business-product #busnProd
+          [businessObj]="businessObj"
+          [businessTitle]="title"
+          (businessProdChanges)="onBusnProdChanges($event)"
+        >
+        </app-business-product>
+      </ng-container>
+      <ng-container>
+        <app-business-payment #busnPay
+          [businessObj]="businessObj"
+          [businessTitle]="title"
+        >
+        </app-business-payment>
+      </ng-container>
 
-    <div class="margin-top-15px">
-      <button mat-raised-button
-        color="warn"
-        [disabled]="!options.valid"
-        (click)="onSubmit()">Salvar
-      </button>
-      <button mat-raised-button class="margin-left-10px" (click)="resetForm()">Cancelar</button>
-    </div>
-  </form>
+      <div class="margin-top-15px">
+        <button mat-raised-button
+          color="warn"
+          [disabled]="!options.valid"
+          (click)="onSubmit()">Salvar
+        </button>
+        <button mat-raised-button class="margin-left-10px" (click)="resetAllForms()">Cancelar</button>
+      </div>
+    </form>
 
   </mat-card-content>
   <ng-template #loading>
