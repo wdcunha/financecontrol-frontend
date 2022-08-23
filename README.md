@@ -10,7 +10,7 @@ Payment types has calculation when blur from Installment field and the result is
 
 ### Sales/Purchase list screen
 
-Here is listed all Sales/Purchase and it will have a filter that allows the user choose criterias according to his/her needs.
+Here is listed all Sales/Purchase and there's filters that allows the user choose criterias according to his/her needs, but 3 options only: text search (just for value, date and notes), dropdown (for entities) and datepicker (select period and show just occurences for this one).
 
 The table has in its footer the total value of the registers retrieved, which can be changed as the user set filters.
 
@@ -39,12 +39,13 @@ Setting default value gave lots of work to be done, because most of solution in 
 
 Another issue was when clicking the link in the menu to change from purchase to sell (or vise verse), the dropdown didn't update with the default value, then I noticed that inside route queryParams subscribe the code was updated for lables and then I call the setValue from there for businessType and entities.
 
-There was an issue about date when saving business and it was hard to solve. First I had to install material-moment-adapter and there was version conflict that was solved using --legacy-peer-deps after the [install command](https://stackoverflow.com/questions/64573177/unable-to-resolve-dependency-tree-error-when-installing-npm-packages). 
+There was an issue about date when saving business and it was hard to solve.The solution is to install the version correspondent to 12 that is what is being used here:
 
-```npm i @angular/material-moment-adapter --legacy-peer-deps```
+```npm i @angular/material-moment-adapter@12.2.13```
 
-It is also necessary to (install moment)[https://stackoverflow.com/questions/61537526/typescript-error-cannot-find-module-moment]:
-```npm i moment --legacy-peer-deps```
+It is also necessary to (install moment):
+
+```npm i --save moment@2.29.1```
 
 About to convert date in the format, I found solution using [datepipe](https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way) and one simple way that use [toISOString](https://www.codegrepper.com/code-examples/javascript/typescript+date+to+string+yyyy-mm-dd) that seems to be the ligther option.
 
@@ -76,3 +77,8 @@ Error of undefined is something really commum and the solution vary as the case:
 Sometimes this error is fixed by putting Number to cast or the bang sign, but in some cases it is not enough, as in business component in method calcTotal that was used 'as a number' and the problem was solved.
 
 When a field has its value shared for other purposes and need to have the value as double type, a solution indicate by Taruga was use currencyMask in the input tag as in the business payment form for Valor and in the business product as well.
+
+An error ocurred when trying to pass as parameter Business result from service an observable, data came from backend, to MatTableDataSource: ```Argument of type Observable is not assignable MatTableDataSource angular```. The solution was subscribe the variable and assign within for the MatTableDataSource variable, as pointed in a post at [stackoverflow](https://stackoverflow.com/a/41819825/11697526).
+
+
+The entity dropdown filter retrieves entities about save or purchase, but if there's more than one, it would repeat in the dropdown list, so it was necessary to filter distictly and for that, filtering in a array of object was tricky, but an example of [Typescript Distinct Array on stackblitz](https://stackblitz.com/edit/typescript-distinct-array?file=index.ts) solved the problem of removing repeated results.

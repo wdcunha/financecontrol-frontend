@@ -18,7 +18,6 @@
       <mat-form-field appearance="outline">
         <mat-select required
         name="entities" formControlName="entities">
-          <mat-option>-- None --</mat-option>
           <mat-option *ngFor="let ent of entities" [value]="ent">{{ ent.name }}</mat-option>
         </mat-select>
         <mat-label>{{ entityType }}</mat-label>
