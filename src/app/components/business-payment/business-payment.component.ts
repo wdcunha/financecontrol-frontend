@@ -99,12 +99,9 @@ export class BusinessPaymentComponent implements OnInit {
         for (let index = 1; index <= installOrig; index++) {
           busnPay = new BusinessPayment();
 
-          busnPay.amount = Utils.strToDouble(formArr.get('installmentValue')?.value);
           if (paymentType.description == 'Dinheiro') {
-            console.log('dinheiro');
             busnPay.payDate = Utils.formatYmd(formArr.get('paymentDate')?.value);
           } else {
-            console.log('outras formas');
             busnPay.payDate = Utils.incrementMonth(formArr.get('paymentDate')?.value, index);
           }
           busnPay.amount = formArr.get('installmentValue')?.value;
@@ -130,30 +127,19 @@ export class BusinessPaymentComponent implements OnInit {
 
       this.calc = Number(total) / Number(value.target.value);
 
-      console.log(this.calc);
-
     } else {
-      console.log(this.calc);
       this.calc = this.calc / Number(value.target.value);
-      console.log(this.calc);
     }
 
-    console.log(this.calc);
-
-
     (this.paymentForm.controls.payments as FormArray).at(index).get('installmentValue')?.patchValue(this.calc);
-
   }
 
   updateCalc(index: number) {
+    const value = (this.paymentForm.controls.payments as FormArray).at(index).get('installmentValue')?.value;
 
     if (value != this.calc) {
-  calculateInstallmentValue(value: any) {
-    console.log(value.target.value);
-
       this.calc = this.calc - Number(value);
     }
-    console.log(this.calc);
   }
 
   onSubmit(business: Business) {

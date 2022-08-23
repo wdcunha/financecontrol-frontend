@@ -82,3 +82,5 @@ An error ocurred when trying to pass as parameter Business result from service a
 
 
 The entity dropdown filter retrieves entities about save or purchase, but if there's more than one, it would repeat in the dropdown list, so it was necessary to filter distictly and for that, filtering in a array of object was tricky, but an example of [Typescript Distinct Array on stackblitz](https://stackblitz.com/edit/typescript-distinct-array?file=index.ts) solved the problem of removing repeated results.
+
+Yet, for date filter in business list, it was taken from the [datepicker material page](https://material.angular.io/components/datepicker/api) the example of code to load just month and year and moment is used in this implementation.
