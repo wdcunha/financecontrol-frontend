@@ -1,11 +1,11 @@
-import { DecimalPipe } from '@angular/common';
-import { registerLocaleData } from '@angular/common';
+import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import localePt from '@angular/common/locales/pt';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
@@ -20,18 +20,17 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CurrencyMaskConfig, CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BusinessPaymentComponent } from './components/business-payment/business-payment.component';
+import { BusinessProductComponent } from './components/business-product/business-product.component';
 import { BusinessFormComponent } from './components/business/business-form/business-form.component';
 import { BusinessComponent } from './components/business/business.component';
 import { PersonComponent } from './components/person/person.component';
 import { ProductComponent } from './components/product/product.component';
 import { SalesComponent } from './components/sales/sales.component';
 import { TypePersonComponent } from './components/type-person/type-person.component';
-import { BusinessProductComponent } from './components/business-product/business-product.component';
-import { BusinessPaymentComponent } from './components/business-payment/business-payment.component';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import { CurrencyMaskInputMode, CurrencyMaskConfig, NgxCurrencyModule } from 'ngx-currency';
 
 registerLocaleData(localePt)
 
@@ -55,9 +54,9 @@ export const customCurrencyMaskConfig: CurrencyMaskConfig = {
     PersonComponent,
     ProductComponent,
     BusinessComponent,
-    SalesComponent,
     BusinessFormComponent,
     BusinessProductComponent,
+    BusinessPaymentComponent,
     BusinessPaymentComponent
   ],
   imports: [
