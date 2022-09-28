@@ -8,7 +8,7 @@ Products has calculation per product by quantity and a total for all typed ones.
 
 Payment types has calculation when blur from Installment field and the result is filled out in Value field and in case to have more than one line, when exit from Value field will calculate the new value if the sugested value has been changed and fill out the next Value field in the new form array
 
-### Sales/Purchase list screen
+### Business list screen
 
 Here is listed all Sales/Purchase and there's filters that allows the user choose criterias according to his/her needs, but 3 options only: text search (just for value, date and notes), dropdown (for entities) and datepicker (select period and show just occurences for this one).
 
@@ -84,3 +84,7 @@ An error ocurred when trying to pass as parameter Business result from service a
 The entity dropdown filter retrieves entities about save or purchase, but if there's more than one, it would repeat in the dropdown list, so it was necessary to filter distictly and for that, filtering in a array of object was tricky, but an example of [Typescript Distinct Array on stackblitz](https://stackblitz.com/edit/typescript-distinct-array?file=index.ts) solved the problem of removing repeated results.
 
 Yet, for date filter in business list, it was taken from the [datepicker material page](https://material.angular.io/components/datepicker/api) the example of code to load just month and year and moment is used in this implementation.
+
+### AUTHENTICATION JWT - TOKEN-BASED
+
+The auth functionality was implemented base on the tutorial (angular 12 jwt auth)[https://www.bezkoder.com/angular-12-jwt-auth/].

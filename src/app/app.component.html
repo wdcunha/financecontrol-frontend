@@ -2,22 +2,33 @@
   <mat-icon class="mat-18">language</mat-icon>
   <span>Controle Financeiro</span>
   <div class="menu-opt">
-    <button mat-button class="menu-btt" routerLink="/">Inicial</button>
-    <button mat-button class="menu-btt" routerLink="/person">Entidades</button>
-    <button mat-button class="menu-btt" routerLink="/type-person">Tipos</button>
-    <button mat-button class="menu-btt" routerLink="/product">Produtos</button>
-    <button mat-button [matMenuTriggerFor]="matPurchase">Compras</button>
+    <button mat-button class="menu-btt" routerLink="/" *ngIf="isLoggedIn">Inicial</button>
+    <button mat-button class="menu-btt" routerLink="/person" *ngIf="isLoggedIn">Entidades</button>
+    <button mat-button class="menu-btt" routerLink="/type-person" *ngIf="isLoggedIn">Tipos</button>
+    <button mat-button class="menu-btt" routerLink="/product" *ngIf="isLoggedIn">Produtos</button>
+    <button mat-button [matMenuTriggerFor]="matPurchase" *ngIf="isLoggedIn">Compras</button>
     <mat-menu #matPurchase="matMenu">
-      <button mat-button class="menu-btt" routerLink="/business/lista-compras">Lista</button>
-      <button mat-button class="menu-btt" routerLink="/business-form/compra">Cadastrar compras</button>
-
+      <button mat-button class="menu-btt" routerLink="/business/lista-compras" *ngIf="isLoggedIn">Lista</button>
+      <button mat-button class="menu-btt" routerLink="/business-form/compra" *ngIf="isLoggedIn">Cadastrar compras</button>
     </mat-menu>
-    <button mat-button [matMenuTriggerFor]="matSale">Vendas</button>
+    <button mat-button [matMenuTriggerFor]="matSale" *ngIf="isLoggedIn">Vendas</button>
     <mat-menu #matSale="matMenu">
-      <button mat-button class="menu-btt" routerLink="/business/lista-vendas">Vendas</button>
-      <button mat-button class="menu-btt" routerLink="/business-form/venda">Cadastrar vendas</button>
-
+      <button mat-button class="menu-btt" routerLink="/business/lista-vendas" *ngIf="isLoggedIn">Vendas</button>
+      <button mat-button class="menu-btt" routerLink="/business-form/venda" *ngIf="isLoggedIn">Cadastrar vendas</button>
     </mat-menu>
+    <button mat-button [matMenuTriggerFor]="matUser" *ngIf="isLoggedIn">Usuários</button>
+    <mat-menu #matUser="matMenu">
+      <button mat-button class="menu-btt" routerLink="/cadastrar-usuario" *ngIf="isLoggedIn">Cadastrar</button>
+    </mat-menu>
+    <button mat-button class="menu-btt" routerLink="/admin" *ngIf="isLoggedIn">Módulo Admin</button>
+    <span class="spacer"></span>
+    <div>
+      <button mat-button class="menu-btt" routerLink="/login" *ngIf="!isLoggedIn">Login</button>
+      <a routerLink="/profile"><span>{{ username }}</span></a>
+      <button mat-icon-button class="example-icon favorite-icon"  *ngIf="isLoggedIn" aria-label="Example icon-button with heart icon" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
   </div>
 </mat-toolbar>
 <router-outlet></router-outlet>

@@ -1,0 +1,48 @@
+<div class="login-container">
+  <div class="register-content">
+    <mat-toolbar class="login-toolbar" color="primary">Cadastro de Usuário</mat-toolbar>
+    <mat-card>
+      <form [formGroup]="registerForm"
+        *ngIf="!isSuccessful"
+        #formDirective="ngForm"
+        (ngSubmit)="formDirective.form.valid && onSubmit(formDirective)"
+        novalidate>
+
+        <mat-form-field>
+          <mat-icon matPrefix class="margin-right-10px">email</mat-icon>
+          <input autofocus type="email" matInput placeholder="E-mail" formControlName="email" minlength="3" maxlength="20" required>
+          <mat-error *ngIf="checkValidation('email')">
+            {{ emailErrors() }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-icon matPrefix class="margin-right-10px">person_outline</mat-icon>
+          <input autofocus type="text" matInput placeholder="Nome do usuário" formControlName="username" minlength="3" maxlength="20" required>
+          <mat-error *ngIf="checkValidation('username')">
+            {{ fieldRequired }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-icon matPrefix class="margin-right-10px">groups</mat-icon>
+          <input autofocus type="text" matInput placeholder="Perfil" formControlName="role" minlength="3" maxlength="20" required>
+          <mat-error *ngIf="checkValidation('role')">
+            {{ fieldRequired }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-icon matPrefix class="margin-right-10px">lock_outline</mat-icon>
+          <input type="password" autocomplete="false" matInput placeholder="Password *" minlength="6" formControlName="password">
+          <mat-hint>Choose a password of at least eight characters, one uppercase letter and one number</mat-hint>
+          <mat-error *ngIf="checkValidation('password')">
+            {{ getErrorPassword() }}
+          </mat-error>
+        </mat-form-field>
+
+        <button type="submit" mat-raised-button color="primary">Salvar</button>
+      </form>
+    </mat-card>
+  </div>
+</div>

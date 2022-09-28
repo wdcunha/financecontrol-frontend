@@ -1,0 +1,27 @@
+<div class="login-container">
+  <div class="login-content">
+    <mat-toolbar class="login-toolbar" color="primary">Autenticação de Usuário</mat-toolbar>
+    <mat-card>
+      <form [formGroup]="loginForm"
+        *ngIf="!isLoggedIn"
+        #formDirective="ngForm"
+        (ngSubmit)="formDirective.form.valid && onSubmit()"
+        novalidate>
+
+        <mat-form-field>
+          <mat-icon matPrefix>person_outline</mat-icon>
+          <input autofocus type="text" matInput #username name="username" placeholder="Username" formControlName="username" required>
+          <mat-error *ngIf="requiredError('username')">Nome de usuário precisa ser preenchido!</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-icon matPrefix>lock_outline</mat-icon>
+          <input type="password" autocomplete="false" matInput placeholder="Password" formControlName="password">
+          <mat-error *ngIf="requiredError('password')">Senha precisa ser informada!</mat-error>
+        </mat-form-field>
+
+        <button type="submit" mat-raised-button color="primary">LOGIN</button>
+      </form>
+    </mat-card>
+  </div>
+</div>
