@@ -88,3 +88,10 @@ Yet, for date filter in business list, it was taken from the [datepicker materia
 ### AUTHENTICATION JWT - TOKEN-BASED
 
 The auth functionality was implemented base on the tutorial (angular 12 jwt auth)[https://www.bezkoder.com/angular-12-jwt-auth/].
+
+
+### HEROKU DEPLOYMENT
+
+In order to have the application usable for commum users, it was deployed into Heroku platform and the tutorial (How to Deploy Angular Application to Heroku)[https://www.javaguides.net/2020/11/how-to-deploy-angular-application-to-heroku.html] was base to get it running, because it is a simple tuto without huge text and pratical explanation.
+
+Some notes about deploy is that installing express and path the version install information wasn't added to package.json, so it was needed to put manually. It was done the same for the package-lock file.
