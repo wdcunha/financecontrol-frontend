@@ -94,4 +94,9 @@ The auth functionality was implemented base on the tutorial (angular 12 jwt auth
 
 In order to have the application usable for commum users, it was deployed into Heroku platform and the tutorial (How to Deploy Angular Application to Heroku)[https://www.javaguides.net/2020/11/how-to-deploy-angular-application-to-heroku.html] was base to get it running, because it is a simple tuto without huge text and pratical explanation.
 
+https://github.com/bezkoder/angular-12-jwt-authentication/tree/master/src
+https://github.com/bezkoder/angular-10-spring-boot-jwt-authentication/blob/master/README.md
+
 Some notes about deploy is that installing express and path the version install information wasn't added to package.json, so it was needed to put manually. It was done the same for the package-lock file.
+
+There was an error about node that a video (failed to compile Node.js app heroku - NodeJS)[https://www.youtube.com/watch?v=HMCC_T1wmjc] guided to remove package-lock from git by the command ```git rm package-lock.json```.
