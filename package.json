@@ -7,6 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "preinstall": "npx npm-force-resolutions",
+    "postinstall": "ngcc",
     "heroku-postbuild": "ng build --prod"
   },
   "private": true,
@@ -49,7 +51,7 @@
     "typescript": "~4.3.5"
   },
   "engines": {
-    "node": "16.9.1",
+    "node": "16.10",
     "npm": "8.16.0"
  }
 }
