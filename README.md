@@ -99,4 +99,24 @@ https://github.com/bezkoder/angular-10-spring-boot-jwt-authentication/blob/maste
 
 Some notes about deploy is that installing express and path the version install information wasn't added to package.json, so it was needed to put manually. It was done the same for the package-lock file.
 
-There was an error about node that a video (failed to compile Node.js app heroku - NodeJS)[https://www.youtube.com/watch?v=HMCC_T1wmjc] guided to remove package-lock from git by the command ```git rm package-lock.json```.
+There was an error about node that a video [failed to compile Node.js app heroku - NodeJS](https://www.youtube.com/watch?v=HMCC_T1wmjc) guided to remove package-lock from git by the command ```git rm package-lock.json```, but I needed to remove from local and push this change. Before this, there was problem when building the application.
+
+Following some tips from web, I added [postinstall running ngcc](https://stackoverflow.com/questions/60239941/appears-in-the-ngmodule-imports-of-appmodule-but-could-not-be-resolved-to-an-ng/60519140#60519140) to take Ivy and AOT advantage (something to figure out better yet).
+
+Another problem was that I didn't notice that some of the components I thought wasn't important to push, gave errors when running ng or build, because module cound not find them, so after pushing the problem was solved.
+
+Heroku is not free anymore, so finishing all problems of building, I got another about plan: Launching... push failed. To solve that I needed to chosse a plan (payed and cheapest one - $5 per 1000 dynos month) -  [Eco Dynos](https://blog.heroku.com/new-low-cost-plans).
+
+After all this, I got another error: ng not found. So installed heroku cli:
+
+[Help to install](https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli): used npm;
+[Command Lines](https://devcenter.heroku.com/articles/heroku-cli-commands);
+
+Common used:
+
+heroku --version
+heroku login
+heroku access --app fem-inance-control-front
+heroku logs --tail --app fem-inance-control-front
+heroku restart --app fem-inance-control-front
+
